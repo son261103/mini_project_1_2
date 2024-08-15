@@ -16,7 +16,7 @@ class ProductListComponent extends Component {
     }
 
     render() {
-        const {products, totalQuantity, totalPrice} = this.props;
+        const { products, totalQuantity, totalPrice, searchText, onSearch, onClearSearch } = this.props;
         return (
             <div className="card shadow">
                 <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -39,9 +39,14 @@ class ProductListComponent extends Component {
                         </div>
                         <div className="d-flex">
                             <input type="text" className="form-control me-2" id="searchInput"
-                                   placeholder="Tìm kiếm..."/>
-                            <button className="btn btn-outline-secondary" id="searchBtn">
-                                <i className="fas fa-search"></i>
+                                   placeholder="Tìm kiếm..."
+                                   value={searchText}
+                                   onChange={onSearch}
+                            />
+                            <button className="btn btn-outline-secondary" id="clearSearchBtn"
+                                    onClick={onClearSearch}
+                            >
+                                <i className="fas fa-times"></i>
                             </button>
                         </div>
                     </div>
@@ -50,6 +55,7 @@ class ProductListComponent extends Component {
                             products={products}
                             onViewProduct={this.handleViewProduct}
                             onEditProduct={this.handleEditProduct}
+                            onDeleteProduct={this.props.onDeleteProduct}
                         />
                     </div>
                     <div className="table-footer mt-3">

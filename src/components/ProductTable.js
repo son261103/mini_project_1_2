@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Product from './Product';
 
 class ProductTable extends Component {
     render() {
-        const {products} = this.props;
+        const { products } = this.props;
 
         return (
             <div className="table-responsive">
@@ -19,12 +19,13 @@ class ProductTable extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {products.map(index => (
+                    {products.map(product => (
                         <Product
-                            key={index.id}
-                            {...index}
-                            onViewProduct={() => this.props.onViewProduct(index)}
-                            onEditProduct={() => this.props.onEditProduct(index)}
+                            key={product.id}
+                            {...product}
+                            onViewProduct={() => this.props.onViewProduct(product)}
+                            onEditProduct={() => this.props.onEditProduct(product)}
+                            onDeleteProduct={() => this.props.onDeleteProduct(product)}
                         />
                     ))}
                     </tbody>

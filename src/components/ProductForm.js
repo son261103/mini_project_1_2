@@ -21,7 +21,7 @@ class ProductForm extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         const { id, name, quantity, price } = this.state;
-        const product = { id, name, quantity, price };
+        const product = { id, name, quantity, price, subtotal: quantity * price };
         this.props.onHandleSubmit(this.props.actionName, product);
     }
 
@@ -30,49 +30,41 @@ class ProductForm extends Component {
 
         return (
             <div className="card shadow">
-                <div className="card-header bg-secondary text-white">
-                    <h2 className="h4 mb-0">Thông tin sản phẩm</h2>
+                <div className="card-header bg-primary text-white">
+                    <h2 className="h4 mb-0">{actionName === 'Edit' ? 'Edit' : 'Add'} Product</h2>
                 </div>
                 <div className="card-body">
                     <form onSubmit={this.handleSubmit}>
                         <div className="mb-3">
-                            <label htmlFor="id" className="form-label">ID</label>
-                            <input type="text" className="form-control"
-                                   id="id" placeholder="Product ID"
-                                   name="id"
+                            <label htmlFor="id" className="form-label">Product ID</label>
+                            <input type="text" className="form-control" id="id" name="id"
                                    value={this.state.id}
                                    onChange={this.handleChange}
+                                   disabled={actionName === 'Edit'}
                             />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="name" className="form-label">Name</label>
-                            <input type="text" className="form-control"
-                                   id="name" placeholder="Product name"
-                                   name="name"
+                            <label htmlFor="name" className="form-label">Product Name</label>
+                            <input type="text" className="form-control" id="name" name="name"
                                    value={this.state.name}
                                    onChange={this.handleChange}
                             />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="quantity" className="form-label">Quantity</label>
-                            <input type="number" className="form-control"
-                                   id="quantity" placeholder="0"
-                                   name="quantity"
+                            <input type="number" className="form-control" id="quantity" name="quantity"
                                    value={this.state.quantity}
                                    onChange={this.handleChange}
                             />
                         </div>
                         <div className="mb-3">
                             <label htmlFor="price" className="form-label">Price</label>
-                            <input type="number" className="form-control"
-                                   id="price" placeholder="0"
-                                   name="price"
+                            <input type="number" className="form-control" id="price" name="price"
                                    value={this.state.price}
                                    onChange={this.handleChange}
                             />
                         </div>
-                        <button type="submit" className="btn btn-primary w-100">
-                            <i className="fas fa-save me-2"></i>
+                        <button type="submit" className="btn btn-primary">
                             {actionName}
                         </button>
                     </form>

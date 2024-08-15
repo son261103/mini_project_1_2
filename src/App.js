@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import HeaderComponent from './components/HeaderComponent';
 import ProductListComponent from './components/ProductListComponent';
@@ -40,7 +40,7 @@ class App extends Component {
                     price: 1400,
                     subtotal: 28000
                 },
-            ], // List of products
+            ],
             currentProduct: {},
             searchText: ""
         };
@@ -56,7 +56,6 @@ class App extends Component {
 
     handleSubmit = (actionName, product) => {
         let listProducts = this.state.products;
-        console.log(actionName, product);
         if (actionName === "Edit") {
             for (let i = 0; i < listProducts.length; i++) {
                 if (listProducts[i].id === product.id) {
@@ -64,20 +63,10 @@ class App extends Component {
                     break;
                 }
             }
-            this.setState(
-                {
-                    products: listProducts
-                }
-            );
-        }
-        if (actionName === "Save") {
+        } else if (actionName === "Save") {
             listProducts.push(product);
-            this.setState(
-                {
-                    products: listProducts
-                }
-            );
         }
+
         this.setState({
             products: [...listProducts],
             isToggled: false,
@@ -85,11 +74,10 @@ class App extends Component {
         });
     }
 
-    caculateSubtotal = () => {
-        const {products} = this.state;
+    caculateSubtotal = (products) => {
         const totalQuantity = products.reduce((total, product) => total + product.quantity, 0);
         const totalPrice = products.reduce((total, product) => total + product.subtotal, 0);
-        return {totalQuantity, totalPrice};
+        return { totalQuantity, totalPrice };
     }
 
     handleSearch = (event) => {
@@ -105,44 +93,39 @@ class App extends Component {
     }
 
     handleDeleteProduct = (product) => {
-        let listProducts = this.state.products;
-        for (let i = 0; i < listProducts.length; i++) {
-            if (listProducts[i].id === product.id) {
-                listProducts.splice(i, 1);
-                break;
-            }
-        }
+        const listProducts = this.state.products.filter(p => p.id !== product.id);
         this.setState({
-            products: [...listProducts]
+            products: listProducts
         });
     }
 
     getFilteredProducts = () => {
-        const { products, searchTerm } = this.state;
-        if (!searchTerm) return products;
+        const { products, searchText } = this.state;
+        if (!searchText) return products;
 
         return products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            product.id.toLowerCase().includes(searchTerm.toLowerCase())
+            product.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            product.id.toLowerCase().includes(searchText.toLowerCase())
         );
     }
 
-
     render() {
-        let { isToggled, actionName, currentProduct, searchText } = this.state;
-        let productsFillter = this.getFilteredProducts();
-        let {totalQuantity, totalPrice} = this.caculateSubtotal(productsFillter);
+        const { isToggled, actionName, currentProduct } = this.state;
+        const filteredProducts = this.getFilteredProducts();
+        const { totalQuantity, totalPrice } = this.caculateSubtotal(filteredProducts);
+
         return (
             <div className="container-fluid">
-                <HeaderComponent/>
+                <HeaderComponent />
                 <div className="row mt-5">
                     <div className="col-md-6">
                         <ProductListComponent
-                            products={productsFillter}
+                            products={filteredProducts}
                             onAddProduct={this.handleAddProduct}
                             totalQuantity={totalQuantity}
                             totalPrice={totalPrice}
-                            searchText={this.handleSearch}
+                            searchText={this.state.searchText}
+                            onSearch={this.handleSearch}
                             onClearSearch={this.handleClearSearch}
                             onDeleteProduct={this.handleDeleteProduct}
                         />
@@ -153,11 +136,10 @@ class App extends Component {
                                 actionName={actionName}
                                 product={currentProduct}
                                 onHandleSubmit={this.handleSubmit}
-
                             />}
                     </div>
                 </div>
-                <FooterComponent/>
+                <FooterComponent />
             </div>
         );
     }
